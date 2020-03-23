@@ -60,7 +60,9 @@ public:
         z *= scalar;
         return *this;
     }
-
+    bool operator==(const Vector &other) const {
+        return x == other.x && y == other.y && z == other.z;
+    }
 };
 Vector operator*(const double &scalar, const Vector &vector) {
     return Vector(scalar * vector.x, scalar * vector.y, scalar * vector.z);
@@ -81,6 +83,10 @@ public:
     Disk(const Disk &other) :
         radius(other.radius), position(Vector(position)), velocity(Vector(velocity)) {}
     ~Disk() {}
+
+    bool operator==(const Disk &other) const {
+        return radius == other.radius && position == other.position && velocity == other.position;
+    }
 };
 
 #endif // INCLUDE
