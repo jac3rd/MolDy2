@@ -1,7 +1,10 @@
 #include "include.h"
 #include <cstdlib>
 #include <ctime>
-#include <forward_list>
+#include <list>
+#include "TH1.h"
+#include "TCanvas.h"
+#include "TImage.h"
 
 #define NUM_DISKS 64
 #define DELTA 1
@@ -9,8 +12,8 @@
 #define NUM_MOVES 100000
 #define NUM_BINS 10
 
-bool ValidAddition(const Disk &newbie, const std::forward_list<Disk> &actors) {
-  for(std::forward_list<Disk>::const_iterator it = actors.begin(); it != actors.end(); it++) {
+bool ValidAddition(const Disk &newbie, const std::list<Disk> &actors) {
+  for(std::list<Disk>::const_iterator it = actors.begin(); it != actors.end(); it++) {
     if(newbie.Overlaps(*it)) {
       return false;
     }
@@ -19,10 +22,10 @@ bool ValidAddition(const Disk &newbie, const std::forward_list<Disk> &actors) {
 }
 
 //returns number of disks that are at least partially contained in bin of width bin_width centered on bin_center
-unsigned int NumIntersections(const double &bin_center, const double &bin_width, const std::forward_list<Disk> &actors) {
+unsigned int NumIntersections(const double &bin_center, const double &bin_width, const std::list<Disk> &actors) {
   unsigned int total = 0;
-  for(std::forward_list<Disk>::const_iterator it = actors.begin(); it != actors.end(); it++) {
-    if((*it).position.x - (*it).radius <= x + bin_width/2 && x - bin_width/2 <= (*it).position.x + (*it).radius) {
+  for(std::list<Disk>::const_iterator it = actors.begin(); it != actors.end(); it++) {
+    if((*it).position.x - (*it).radius <= bin_center + bin_width/2 && bin_center - bin_width/2 <= (*it).position.x + (*it).radius) {
       total++;
     }
   }
@@ -34,7 +37,7 @@ int main(int argc, char** argv) {
   std::list<Disk> actors;
   const double radius = BOX_LENGTH/(double)NUM_DISKS;
   unsigned int n = 0;
-  while(n < NUMDISKS) {
+  while(n < NUM_DISKS) {
     const double x = (BOX_LENGTH - 2 * radius) * (std::rand()/(double)RAND_MAX) + radius;
     const double y = (BOX_LENGTH - 2 * radius) * (std::rand()/(double)RAND_MAX) + radius;
     Disk newbie(radius, Vector2D(x, y));
@@ -55,8 +58,10 @@ int main(int argc, char** argv) {
     //get random Disk to walk
     n = std::rand() % actors.size();
     //save reference to Disk, and remove from system
-    Disk mover = *(actors.begin()+n);
-    actors.erase(actors.begin()+n);
+    std::list<Disk>::iterator it = actors.begin();
+    std::advance(it, n);
+    Disk mover = *(it);
+    actors.erase(it);
     //create copy of Disk, and move it by delta forward_list
     Disk mover_clone = Disk(mover);
     const double dx = DELTA * (2 * std::rand()/(double)RAND_MAX - 1);
