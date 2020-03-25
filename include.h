@@ -26,7 +26,7 @@ public:
             return Vector(1, 0, 0);
         return Vector(x / magnitude, y / magnitude, z / magnitude);
     }
-    Vector Dot(const Vector &other) const {
+    long double Dot(const Vector &other) const {
         return x * other.x + y * other.y + z * other.z;
     }
     Vector Cross(const Vector &other) const {
@@ -37,18 +37,18 @@ public:
         return Vector(x + other.x, y + other.y, z + other.z);
     }
     Vector& operator+=(const Vector &other) {
-        this.x += other.x;
-        this.y += other.y;
-        this.z += other.z;
+        x += other.x;
+        y += other.y;
+        z += other.z;
         return *this;
     }
     Vector operator-(const Vector &other) const {
         return Vector(x - other.x, y - other.y, z - other.z);
     }
     Vector& operator-=(const Vector &other) {
-        this.x -= other.x;
-        this.y -= other.y;
-        this.z -= other.z;
+        x -= other.x;
+        y -= other.y;
+        z -= other.z;
         return *this;
     }
     Vector operator*(const double &scalar) const {
@@ -83,6 +83,10 @@ public:
     Disk(const Disk &other) :
         radius(other.radius), position(Vector(position)), velocity(Vector(velocity)) {}
     ~Disk() {}
+
+    bool Overlaps(const Disk &other) const {
+        return (position - other.position).Magnitude < radius + other.radius;
+    }
 
     bool operator==(const Disk &other) const {
         return radius == other.radius && position == other.position && velocity == other.position;
