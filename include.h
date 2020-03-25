@@ -3,85 +3,77 @@
 
 #include <cmath>
 
-class Vector {
+class Vector2D {
 public:
     double x;
     double y;
-    double z;
 
-    Vector() : 
-        x(0), y(0), z(0) {}
-    Vector(const double &x, const double &y, const double &z) :
-        x(x), y(y), z(z) {}
-    Vector(const Vector &other) :
-        x(other.x), y(other.y), z(other.z) {}
-    ~Vector() {}
+    Vector2D() : 
+        x(0), y(0) {}
+    Vector2D(const double &x, const double &y) :
+        x(x), y(y) {}
+    Vector2D(const Vector2D &other) :
+        x(other.x), y(other.y) {}
+    ~Vector2D() {}
 
     double Magnitude() const {
-        return std::sqrt(x*x + y*y + z*z);
+        return std::sqrt(x*x + y*y);
     }
-    Vector Normalized() const {
+    Vector2D Normalized() const {
         double magnitude = Magnitude();
         if(magnitude == 0)
-            return Vector(1, 0, 0);
-        return Vector(x / magnitude, y / magnitude, z / magnitude);
+            return Vector2D(1, 0);
+        return Vector2D(x / magnitude, y / magnitude);
     }
-    long double Dot(const Vector &other) const {
-        return x * other.x + y * other.y + z * other.z;
-    }
-    Vector Cross(const Vector &other) const {
-        return Vector(y * other.z, -1 * z * other.x, x * other.y);
+    long double Dot(const Vector2D &other) const {
+        return x * other.x + y * other.y;
     }
 
-    Vector operator+(const Vector &other) const {
-        return Vector(x + other.x, y + other.y, z + other.z);
+    Vector2D operator+(const Vector2D &other) const {
+        return Vector2D(x + other.x, y + other.y);
     }
-    Vector& operator+=(const Vector &other) {
+    Vector2D& operator+=(const Vector2D &other) {
         x += other.x;
         y += other.y;
-        z += other.z;
         return *this;
     }
-    Vector operator-(const Vector &other) const {
-        return Vector(x - other.x, y - other.y, z - other.z);
+    Vector2D operator-(const Vector2D &other) const {
+        return Vector2D(x - other.x, y - other.y);
     }
-    Vector& operator-=(const Vector &other) {
+    Vector2D& operator-=(const Vector2D &other) {
         x -= other.x;
         y -= other.y;
-        z -= other.z;
         return *this;
     }
-    Vector operator*(const double &scalar) const {
-        return Vector(scalar * x, scalar * y, scalar * z);
+    Vector2D operator*(const double &scalar) const {
+        return Vector2D(scalar * x, scalar * y);
     }
-    Vector& operator*=(const double &scalar) {
+    Vector2D& operator*=(const double &scalar) {
         x *= scalar;
         y *= scalar;
-        z *= scalar;
         return *this;
     }
-    bool operator==(const Vector &other) const {
-        return x == other.x && y == other.y && z == other.z;
+    bool operator==(const Vector2D &other) const {
+        return x == other.x && y == other.y;
     }
 };
-Vector operator*(const double &scalar, const Vector &vector) {
-    return Vector(scalar * vector.x, scalar * vector.y, scalar * vector.z);
+Vector2D operator*(const double &scalar, const Vector2D &vector) {
+    return Vector2D(scalar * vector.x, scalar * vector.y);
 }
 
 class Disk {
 public:
     double radius;
-    Vector position;
-    Vector velocity;
+    Vector2D position;
 
     Disk() :
-        radius(1), position(Vector()), velocity(Vector()) {}
-    Disk(const double &radius, const double &px, const double &py, const double &pz, const double &vx, const double &vy, const double &vz) :
-        radius(radius), position(Vector(px, py, pz)), velocity(Vector(vx, vy, vz))  {}
-    Disk(const double &radius, const Vector &position, const Vector &velocity) :
-        radius(radius), position(Vector(position)), velocity(Vector(velocity)) {}
+        radius(1), position(Vector2D()) {}
+    Disk(const double &radius, const double &px, const double &py, const double &pz) :
+        radius(radius), position(Vector2D(px, py)) {}
+    Disk(const double &radius, const Vector2D &position) :
+        radius(radius), position(Vector2D(position)) {}
     Disk(const Disk &other) :
-        radius(other.radius), position(Vector(position)), velocity(Vector(velocity)) {}
+        radius(other.radius), position(Vector2D(position)) {}
     ~Disk() {}
 
     bool Overlaps(const Disk &other) const {
@@ -89,7 +81,7 @@ public:
     }
 
     bool operator==(const Disk &other) const {
-        return radius == other.radius && position == other.position && velocity == other.position;
+        return radius == other.radius && position == other.position;
     }
 };
 
