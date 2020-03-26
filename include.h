@@ -73,15 +73,15 @@ public:
     Disk(const double &radius, const Vector2D &position) :
         radius(radius), position(Vector2D(position)) {}
     Disk(const Disk &other) :
-        radius(other.radius), position(Vector2D(position)) {}
+        radius(other.radius), position(Vector2D(other.position)) {}
     ~Disk() {}
 
     bool Overlaps(const Disk &other) const {
-        return (position - other.position).Magnitude < radius + other.radius;
+      return (position - other.position).Magnitude() < radius + other.radius;
     }
 
     bool operator==(const Disk &other) const {
-        return radius == other.radius && position == other.position;
+      return radius == other.radius && position == other.position;
     }
 };
 

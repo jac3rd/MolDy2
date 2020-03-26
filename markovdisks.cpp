@@ -9,7 +9,7 @@
 #define NUM_DISKS 64
 #define DELTA 0.1
 #define BOX_LENGTH 1
-#define NUM_MOVES 100000
+#define NUM_MOVES 200
 #define NUM_BINS 10
 
 bool ValidAddition(const Disk &newbie, const std::list<Disk> &actors) {
@@ -39,14 +39,14 @@ unsigned int NumIntersections(const double &bin_center, const double &bin_width,
 int main(int argc, char** argv) {
   std::srand(std::time(nullptr));
   std::list<Disk> actors;
-  const double radius = BOX_LENGTH/(double)NUM_DISKS/4;
+  const double radius = BOX_LENGTH/(double)NUM_DISKS/2;
   unsigned int n = 0;
   while(n < NUM_DISKS) {
     const double x = (BOX_LENGTH - 2 * radius) * (1.0*std::rand()/((double)RAND_MAX)) + radius;
     const double y = (BOX_LENGTH - 2 * radius) * (1.0*std::rand()/((double)RAND_MAX)) + radius;
     Disk newbie(radius, Vector2D(x, y));
     if(ValidAddition(newbie, actors)) {
-        actors.push_back(Disk(radius, Vector2D(x, y)));
+        actors.push_back(newbie);
         n++;
     }
   }
