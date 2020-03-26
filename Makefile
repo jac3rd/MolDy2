@@ -3,7 +3,7 @@ ROOTLIBS   = $(shell root-config --libs)
 ROOTGLIBS  = $(shell root-config --glibs) 
 CXXFLAGS  += $(ROOTCFLAGS)
 GLIBS      = $(ROOTGLIBS)
-GXX	   = /usr/bin/g++ -Wall -O3 -g
+GXX	   = /usr/bin/g++ -Wall -O0 -g
 
 ROOTFLAGS   = $(ROOTCFLAGS) $(ROOTLIBS) $(ROOTGLIBS)
 GSLFLAGS    = -I${EBROOTGSL}/include/gsl  -I/usr/include/gsl -lgsl -lgslcblas
