@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <list>
+#include <iostream>
 #include "TH1.h"
 #include "TCanvas.h"
 #include "TImage.h"
@@ -9,8 +10,8 @@
 #define NUM_DISKS 64
 #define DELTA 0.1
 #define BOX_LENGTH 1
-#define NUM_MOVES 200
-#define NUM_BINS 10
+#define NUM_MOVES 1000000
+#define NUM_BINS 100
 
 bool ValidAddition(const Disk &newbie, const std::list<Disk> &actors) {
   for(std::list<Disk>::const_iterator it = actors.begin(); it != actors.end(); it++) {
@@ -51,6 +52,13 @@ int main(int argc, char** argv) {
     }
   }
 
+  //DEBUG PRINT OUT INITIAL STATE
+  /*
+  for(std::list<Disk>::const_iterator it = actors.begin(); it != actors.end(); it++) {
+    std::cout << "r=" << (*it).radius << " x=" << (*it).position.x << " y=" << (*it).position.y << std::endl;
+  }
+  */
+
   const std::string box_length_string = std::to_string(BOX_LENGTH);
   const std::string num_disks_string = std::to_string(NUM_DISKS);
   const std::string radius_string = std::to_string(radius);
@@ -78,8 +86,8 @@ int main(int argc, char** argv) {
     actors.erase(it);
     //create copy of Disk, and move it by delta forward_list
     Disk mover_clone = Disk(mover);
-    const double dx = DELTA * (2 * std::rand()/((double)RAND_MAX) - 1);
-    const double dy = DELTA * (2 * std::rand()/((double)RAND_MAX) - 1);
+    const double dx = DELTA * (2 * (std::rand()/(double)RAND_MAX) - 1);
+    const double dy = DELTA * (2 * (std::rand()/(double)RAND_MAX) - 1);
     mover_clone.position += Vector2D(dx, dy);
     //if result is valid state, keep it, else restore old Disk
     if(ValidAddition(mover_clone, actors)) {
